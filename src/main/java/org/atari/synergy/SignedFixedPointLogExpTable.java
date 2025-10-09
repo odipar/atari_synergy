@@ -33,8 +33,8 @@ public class SignedFixedPointLogExpTable {
     
     public static void main(String[] args) {
         var l1 = log(100);
-        var l2 = log(0);
-        var result = exp(l1 - l2);
+        var l2 = log(-900);
+        var result = exp(l1 + l2);
         System.out.println("result: " + result);
         System.out.println("table size in bytes: " + total_mem_bytes);
         System.out.println("% of megabyte: " + megabyte_p);
