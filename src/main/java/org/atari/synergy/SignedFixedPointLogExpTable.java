@@ -32,8 +32,8 @@ package org.atari.synergy;
 public class SignedFixedPointLogExpTable {
     
     public static void main(String[] args) {
-        var l1 = log(0);
-        var l2 = log(0);
+        var l1 = log(100);
+        var l2 = log(-500);
         var result = exp(l1 + l2);
         System.out.println("result: " + result);
         System.out.println("table size in bytes: " + total_mem_bytes);
