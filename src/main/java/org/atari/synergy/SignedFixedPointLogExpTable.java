@@ -17,7 +17,7 @@ package org.atari.synergy;
    b: the logarithm of zero yields -oo
    
   Encoding:
-   a: the negative offset -S*2 into the exponent table encodes i*pi
+   a: the negative offset -2*S into the exponent table encodes i*pi
    b: the positive offset  4*S into the exponent table encodes -oo
    
   The encoding is designed for non-conditional multiplication and division of signed integers of size S,
