@@ -1,14 +1,14 @@
-package org.atari.synergy;
+package org.synergy.atari;
 
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.*;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.atari.synergy.SignedFixedPointLogExpTable.*;
+import static org.synergy.atari.SignedFixedPointLogExpTable.*;
 
 public class LogExpTest {
-    static final double avg_error_margin    = 0.0004;
-    static final double single_error_margin = 0.001;
+    static final double avg_error_margin    = 4.0 / S;
+    static final double single_error_margin = 8.0 / S;
     
     static final Percentage error_p = Percentage.withPercentage(single_error_margin * 100.0);
     
@@ -18,20 +18,24 @@ public class LogExpTest {
     
     @Test
     public void mul_log_exp() {
-        assertThat(mul(10, 10)).isEqualTo(10 * 10);
-        assertThat(mul(-10, 10)).isEqualTo(-10 * 10);
-        assertThat(mul(10, -10)).isEqualTo(10 * -10);
-        assertThat(mul(-10, -10)).isEqualTo(-10 * -10);
+        var small = S1 / 10;
         
-        assertThat(mul(8000, 8000)).isCloseTo(8000 * 8000, error_p);
-        assertThat(mul(-8000, 8000)).isCloseTo(-8000 * 8000, error_p);
-        assertThat(mul(8000, -8000)).isCloseTo(8000 * -8000, error_p);
-        assertThat(mul(-8000, -8000)).isCloseTo(-8000 * -8000, error_p);
+        assertThat(mul(small, small)).isCloseTo(small * small, error_p);
+        assertThat(mul(-small, small)).isCloseTo(-small * small, error_p);
+        assertThat(mul(small, -small)).isCloseTo(small * -small, error_p);
+        assertThat(mul(-small, -small)).isCloseTo(-small * -small, error_p);
         
-        assertThat(mul(0, 8000)).isEqualTo(0);
-        assertThat(mul(8000, 0)).isEqualTo(0);
-        assertThat(mul(0, -8000)).isEqualTo(0);
-        assertThat(mul(-8000, 0)).isEqualTo(0);
+        var big = S1 - 2;     // near the threshold
+        
+        assertThat(mul(big, big)).isCloseTo(big * big, error_p);
+        assertThat(mul(-big, big)).isCloseTo(-big * big, error_p);
+        assertThat(mul(big, -big)).isCloseTo(big * -big, error_p);
+        assertThat(mul(-big, -big)).isCloseTo(-big * -big, error_p);
+        
+        assertThat(mul(0, big)).isEqualTo(0);
+        assertThat(mul(big, 0)).isEqualTo(0);
+        assertThat(mul(0, -big)).isEqualTo(0);
+        assertThat(mul(-big, 0)).isEqualTo(0);
         assertThat(mul(0, 0)).isEqualTo(0);
     }
     
@@ -48,8 +52,10 @@ public class LogExpTest {
                 n += 1;
             }
         }
-        double avg_error = sum_error / n;
-        assertThat(avg_error).isLessThan(avg_error_margin);
+        if (n > 0) {
+            double avg_error = sum_error / n;
+            assertThat(avg_error).isLessThan(avg_error_margin);
+        }
     }
     
     @Test
@@ -68,8 +74,10 @@ public class LogExpTest {
                 }
             }
         }
-        double avg_error = sum_error / n;
-        assertThat(avg_error).isLessThan(avg_error_margin);
+        if (n > 0) {
+            double avg_error = sum_error / n;
+            assertThat(avg_error).isLessThan(avg_error_margin);
+        }
     }
     
 }

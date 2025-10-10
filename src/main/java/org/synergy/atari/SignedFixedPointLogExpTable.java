@@ -1,8 +1,8 @@
-package org.atari.synergy;
+package org.synergy.atari;
 
 /*
   Non-exact multiplication and division using a logarithm table and exponent table, bound by a short/integer of size S.
-  Typically S is 8192 (14 * 14 ~ 28 bits accuracy) or 4096 to keep table sizes relatively small (halve a megabyte).
+  Typically S is 4096 (13 * 13 ~ 26 bits accuracy) to keep table sizes relatively small (up to quarter of a megabyte).
   
   Both tables act like functions to allow the following mathematical laws to be exploited:
    1) multiplication:   exp(log(a) + log(b)) = a * b
@@ -32,27 +32,31 @@ package org.atari.synergy;
 public class SignedFixedPointLogExpTable {
     
     public static void main(String[] args) {
-        var l1 = log(100);
-        var l2 = log(200);
-        var result = exp(l1+l2);
-        System.out.println("l1: " + l1);
-        System.out.println("l2: " + l2);
+        var x =  S / 2;
+        var y = -S / 4;
+        var l1 = log(x);
+        var l2 = log(y);
+        var e1 = exp(l1);
+        var e2 = exp(l2);
+        var result = exp(l1 + l2);
         
-        System.out.println("result: " + result);
-        System.out.println("table size in bytes: " + total_mem_bytes);
-        System.out.println("% of megabyte: " + megabyte_p);
-        
+        println("x: " + x);
+        println("y: " + y);
+        println("l1: " + l1);
+        println("l2: " + l2);
+        println("exp(l1): " + e1);
+        println("exp(l2): " + e2);
+        println("exact result: " + x * y);
+        println("approx result: " + result);
+        println("table size in bytes: " + total_mem_bytes);
+        println("% of megabyte: " + megabyte_p);
     }
     
-    public static int log(int value) {
-        return signed_log[log_offset + value];
-    }
+    public static int log(int value) { return signed_log[log_offset + value]; }
+    public static int exp(int signed_log) { return signed_exp[exp_offset + signed_log]; }
+    public static void println(String s) { System.out.println(s); }
     
-    public static int exp(int signed_log) {
-        return signed_exp[exp_offset + signed_log];
-    }
-    
-    public static final int S = 8192;
+    public static final int S = 4096;
     public static final int S1 = S - 1;
     public static final int d_S = S * 2;
     public static final int log_offset = S1;
@@ -68,9 +72,7 @@ public class SignedFixedPointLogExpTable {
     private static final int[] signed_log = new int[d_S];
     private static final int[] signed_exp = new int[d_S * 6 + 1];
     
-    static {
-        init_tables();
-    }
+    static { init_tables(); }
     
     private static void init_tables() {
         init_log_table();
