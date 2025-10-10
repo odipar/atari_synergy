@@ -33,8 +33,11 @@ public class SignedFixedPointLogExpTable {
     
     public static void main(String[] args) {
         var l1 = log(100);
-        var l2 = log(-500);
-        var result = exp(l1 + l2);
+        var l2 = log(200);
+        var result = exp(l1+l2);
+        System.out.println("l1: " + l1);
+        System.out.println("l2: " + l2);
+        
         System.out.println("result: " + result);
         System.out.println("table size in bytes: " + total_mem_bytes);
         System.out.println("% of megabyte: " + megabyte_p);
@@ -49,21 +52,21 @@ public class SignedFixedPointLogExpTable {
         return signed_exp[exp_offset + signed_log];
     }
     
-    private static final int S = 8192;
-    private static final int d_S = S * 2;
-    private static final int log_offset = S - 1;
-    private static final int neg_offset = -d_S;
-    private static final int zero_offset = d_S * 2;
-    private static final int exp_offset = zero_offset;
-    private static final double factor = S / Math.log(S);
+    public static final int S = 8192;
+    public static final int S1 = S - 1;
+    public static final int d_S = S * 2;
+    public static final int log_offset = S1;
+    public static final int neg_offset = -d_S;
+    public static final int zero_offset = d_S * 2;
+    public static final int exp_offset = zero_offset;
+    public static final int total_mem_bytes = (d_S * 6 + 1 + d_S + d_S + S) * 4;
+    public static final int megabyte_p = (100 * total_mem_bytes) / (1024 * 1024);
+    public static final double factor = S1 / Math.log(S1);
     
     private static final int[] log = new int[S];
     private static final int[] exp = new int[d_S];
     private static final int[] signed_log = new int[d_S];
     private static final int[] signed_exp = new int[d_S * 6 + 1];
-    
-    private static final int total_mem_bytes = (d_S * 6 + 1 + d_S + d_S + S) * 4;
-    private static final int megabyte_p = (100 * total_mem_bytes) / (1024 * 1024);
     
     static {
         init_tables();
@@ -86,9 +89,9 @@ public class SignedFixedPointLogExpTable {
     
     public static void init_signed_log_table() {
         var l = 0;
-        for (int i = 1; i < S; i++) { signed_log[l++] = log[S - i] + neg_offset; }
-        signed_log[l++] = zero_offset;
-        for (int i = 1; i < S; i++) { signed_log[l++] = log[i]; }
+        for (int i = 1; i < S; i++) { signed_log[l++] = log[S - i] + neg_offset; }  // -X ( X + -2*S == X + i*pi)
+        signed_log[l++] = zero_offset;                                              // 0  ( 4*S == -oo)
+        for (int i = 1; i < S; i++) { signed_log[l++] = log[i]; }                   // +X ( X )
     }
     
     public static void init_signed_exp_table() {
