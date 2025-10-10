@@ -42,10 +42,10 @@ public class SignedFixedPointLogExpTable {
         
         println("x: " + x);
         println("y: " + y);
-        println("l1: " + l1);
-        println("l2: " + l2);
-        println("exp(l1): " + e1);
-        println("exp(l2): " + e2);
+        println("log(x): " + l1);
+        println("log(y): " + l2);
+        println("exp(log(x)): " + e1);
+        println("exp(log(y)): " + e2);
         println("exact result: " + x * y);
         println("approx result: " + result);
         println("table size in bytes: " + total_mem_bytes);

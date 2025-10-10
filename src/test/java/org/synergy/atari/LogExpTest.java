@@ -18,14 +18,14 @@ public class LogExpTest {
     
     @Test
     public void mul_log_exp() {
-        var small = S1 / 10;
+        var small = S1 / 10;        // near the start
         
         assertThat(mul(small, small)).isCloseTo(small * small, error_p);
         assertThat(mul(-small, small)).isCloseTo(-small * small, error_p);
         assertThat(mul(small, -small)).isCloseTo(small * -small, error_p);
         assertThat(mul(-small, -small)).isCloseTo(-small * -small, error_p);
         
-        var big = S1 - 2;     // near the threshold
+        var big = (S1 * 9) / 10;     // near the end
         
         assertThat(mul(big, big)).isCloseTo(big * big, error_p);
         assertThat(mul(-big, big)).isCloseTo(-big * big, error_p);
