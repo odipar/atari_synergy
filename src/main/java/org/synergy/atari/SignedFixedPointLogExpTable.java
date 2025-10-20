@@ -50,6 +50,9 @@ public class SignedFixedPointLogExpTable {
         println("approx result: " + result);
         println("table size in bytes: " + total_mem_bytes);
         println("% of megabyte: " + megabyte_p);
+        
+        var z = exp(log(4000)/2);
+        println("z: " + z);
     }
     
     public static int log(int value) { return signed_log[log_offset + value]; }
