@@ -60,7 +60,7 @@ public class SignedFixedPointLogExpTable {
     public static int exp(int signed_log) { return signed_exp[exp_offset + signed_log]; }
     public static void println(String s) { System.out.println(s); }
     
-    public static final int S = 4096;
+    public static final int S = 16384;
     public static final int S1 = S - 1;
     public static final int d_S = S * 2;
     public static final int log_offset = S1;
